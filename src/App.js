@@ -6,7 +6,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Welcome to Picasso!</h1>
+        <h1>Picasso: A Whiteboard App</h1>
         <Canvas/>
       </div>
     );

@@ -13,16 +13,20 @@ class CanvasColorButton extends Component {
     },
   };
 
+  componentDidMount() {
+    console.log(this.props);
+    const { colorFromStorage } = this.props;
+    this.setState({ color: colorFromStorage });
+  }
+
   handleClick = () => {
-    this.setState({ displayColorPicker: !this.state.displayColorPicker });
+    const { displayColorPicker } = this.state;
+    this.setState({ displayColorPicker: !displayColorPicker });
   };
 
   handleClose = () => {
     const { color } = this.state;
-    this.setState({ displayColorPicker: false });
-    console.log(color);
-    this.props.setCanvasColor(color);
-
+    this.setState({ displayColorPicker: false }, () => this.props.setCanvasColor(color));
   };
 
   handleChange = color => {
@@ -31,6 +35,7 @@ class CanvasColorButton extends Component {
 
   render() {
     const { color, displayColorPicker } = this.state;
+
     const styles = reactCSS({
       'default': {
         color: {

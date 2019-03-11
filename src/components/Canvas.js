@@ -15,7 +15,7 @@ class Canvas extends Component {
   state = {
     lines: new Immutable.List(),
     isDrawing: false,
-    canvasColor: {
+    canvasColor: JSON.parse(localStorage.getItem('canvasColor')) || {
       r: '255',
       g: '255',
       b: '255',
@@ -25,7 +25,6 @@ class Canvas extends Component {
 
   componentDidMount() {
     document.addEventListener('mouseup', this.handleMouseUp);
-
     this.retrieveDataFromLocalStorage();
   }
 
@@ -33,32 +32,7 @@ class Canvas extends Component {
     document.removeEventListener('mouseup', this.handleMouseUp);
   }
 
-  handleMouseDown = mouseEvent => {
-    if (mouseEvent.button !== 0) {
-      return;
-    }
-
-    const point = this.relativeCoordinatesForEvent(mouseEvent);
-
-    this.setState(prevState => ({
-      lines: prevState.lines.push(new Immutable.List([point])),
-      isDrawing: true
-    }), () => this.saveLinesToLocalStorage());
-  };
-
   retrieveDataFromLocalStorage = () => {
-    this.getLinesFromLocalStorage();
-    console.log(localStorage)
-
-    if(localStorage.getItem('canvasColor') !== 'undefined' && localStorage.getItem('canvasColor')) {
-      console.log(localStorage.getItem('canvasColor'));
-      this.setState({ canvasColor: JSON.parse(localStorage.getItem('canvasColor')) });
-
-    }
-
-  };
-
-  getLinesFromLocalStorage = () => {
     if (localStorage.getItem('lines') !== 'undefined' && localStorage.getItem('lines')) {
       const linesFromStorage = JSON.parse(localStorage.getItem('lines'));
       let lines = [];
@@ -82,8 +56,8 @@ class Canvas extends Component {
 
       this.setState({ lines: new Immutable.List(lines) });
     }
-  }
-  //
+  };
+
   saveLinesToLocalStorage = () => {
     const { lines } = this.state;
     localStorage.setItem('lines', JSON.stringify(lines));
@@ -105,6 +79,19 @@ class Canvas extends Component {
     this.setState({ isDrawing: false });
   };
 
+  handleMouseDown = mouseEvent => {
+    if (mouseEvent.button !== 0) {
+      return;
+    }
+
+    const point = this.relativeCoordinatesForEvent(mouseEvent);
+
+    this.setState(prevState => ({
+      lines: prevState.lines.push(new Immutable.List([point])),
+      isDrawing: true
+    }), () => this.saveLinesToLocalStorage());
+  };
+
   relativeCoordinatesForEvent = mouseEvent => {
     const boundingRect = this.refs.canvas.getBoundingClientRect();
     return new Immutable.Map({
@@ -113,7 +100,7 @@ class Canvas extends Component {
     });
   };
 
-  eraseBoard = () => {
+  eraseCanvas = () => {
     this.setState({ lines: new Immutable.List() }, () => {
       localStorage.removeItem('lines');
     });
@@ -137,10 +124,16 @@ class Canvas extends Component {
       >
 
         <Drawing lines={lines}/>
-        <Button variant="outlined" className={classes.button} onClick={this.eraseBoard}>
-          Erase Entire Board
-        </Button>
-        <CanvasColorButton setCanvasColor={this.setCanvasColor}/>
+        <div>
+          <Button variant="outlined" className={classes.button} onClick={this.eraseCanvas}
+                  style={{ display: 'inline', float: 'left' }}>
+            Erase Lines
+          </Button>
+          <div className="colorButton">
+            <p className="label">Canvas Color</p>
+            <CanvasColorButton setCanvasColor={this.setCanvasColor} colorFromStorage={canvasColor} className="colorPicker"/>
+          </div>
+        </div>
       </div>
     );
   }
