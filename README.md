@@ -8,7 +8,7 @@ This is a cross-platform whiteboard web + Android app created using [React](http
 
 The data persists across browser sessions by leveraging local storage.
 
-Resources:
+#### Resources:
 - [Porting Create-React-App to Cordova](https://github.com/johnkmzhou/cordova-create-react-app)
 - [Drawing with React and Immutable.js](https://medium.com/@colesayershapiro/drawing-in-react-ed5c0a630178)
 
