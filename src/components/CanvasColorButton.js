@@ -14,7 +14,6 @@ class CanvasColorButton extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
     const { colorFromStorage } = this.props;
     this.setState({ color: colorFromStorage });
   }
@@ -26,7 +25,8 @@ class CanvasColorButton extends Component {
 
   handleClose = () => {
     const { color } = this.state;
-    this.setState({ displayColorPicker: false }, () => this.props.setCanvasColor(color));
+    const {setCanvasColor} = this.props;
+    this.setState({ displayColorPicker: false }, () => setCanvasColor(color));
   };
 
   handleChange = color => {
@@ -55,7 +55,8 @@ class CanvasColorButton extends Component {
         popover: {
           position: 'absolute',
           zIndex: '2',
-          top: '50%',
+          top: window.innerWidth > 500 ? '50%' : '45%',
+          left: window.innerWidth > 500 ? 'auto' : '10%',
         },
         cover: {
           position: 'fixed',
@@ -73,7 +74,7 @@ class CanvasColorButton extends Component {
           <div style={styles.color}/>
         </div>
         {displayColorPicker ? <div style={styles.popover}>
-          <div style={styles.cover} onClick={this.handleClose}/>
+          <div style={styles.cover} onMouseDown={this.handleClose}/>
           <SketchPicker color={color} onChange={this.handleChange}/>
         </div> : null}
 

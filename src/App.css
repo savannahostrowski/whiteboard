@@ -11,6 +11,7 @@
   border: 1px solid black;
   cursor: crosshair;
   margin: 0 auto;
+  touch-action: none;
 }
 
 .path {
@@ -40,4 +41,16 @@
 .colorButton > div {
   display:inline;
   float:right;
+}
+
+
+@media (max-width: 600px) {
+
+  h1 {
+    font-size: 16px;
+  }
+
+  .canvas {
+    width: 80%;
+  }
 }

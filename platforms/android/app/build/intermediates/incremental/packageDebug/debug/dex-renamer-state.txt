@@ -1,0 +1,4 @@
+#Mon Mar 11 20:56:36 PDT 2019
+base.0=/Users/savannahostrowski/Documents/code/whiteboard/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex

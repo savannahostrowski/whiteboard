@@ -1,0 +1,4 @@
+#Mon Mar 11 19:46:26 PDT 2019
+base.0=/Users/savannahostrowski/Documents/code/whiteboard/platforms/android/app/build/intermediates/transforms/dex/release/0
+path.0=classes.dex
+renamed.0=classes.dex

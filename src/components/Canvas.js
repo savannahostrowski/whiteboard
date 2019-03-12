@@ -24,12 +24,12 @@ class Canvas extends Component {
   };
 
   componentDidMount() {
-    document.addEventListener('mouseup', this.handleMouseUp);
+    document.addEventListener('pointerup', this.handlePointerUp);
     this.retrieveDataFromLocalStorage();
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener('pointerup', this.handlePointerUp);
   }
 
   retrieveDataFromLocalStorage = () => {
@@ -63,28 +63,28 @@ class Canvas extends Component {
     localStorage.setItem('lines', JSON.stringify(lines));
   };
 
-  handleMouseMove = mouseEvent => {
+  handlePointerMove = pointerEvent => {
     if (!this.state.isDrawing) {
       return;
     }
 
-    const point = this.relativeCoordinatesForEvent(mouseEvent);
+    const point = this.relativeCoordinatesForEvent(pointerEvent);
 
     this.setState(prevState => ({
       lines: prevState.lines.updateIn([prevState.lines.size - 1], line => line.push(point))
     }), () => this.saveLinesToLocalStorage());
   };
 
-  handleMouseUp = () => {
+  handlePointerUp = () => {
     this.setState({ isDrawing: false });
   };
 
-  handleMouseDown = mouseEvent => {
-    if (mouseEvent.button !== 0) {
+  handlePointerDown = pointerEvent => {
+    if (pointerEvent.button !== 0) {
       return;
     }
 
-    const point = this.relativeCoordinatesForEvent(mouseEvent);
+    const point = this.relativeCoordinatesForEvent(pointerEvent);
 
     this.setState(prevState => ({
       lines: prevState.lines.push(new Immutable.List([point])),
@@ -92,11 +92,11 @@ class Canvas extends Component {
     }), () => this.saveLinesToLocalStorage());
   };
 
-  relativeCoordinatesForEvent = mouseEvent => {
+  relativeCoordinatesForEvent = pointerEvent => {
     const boundingRect = this.refs.canvas.getBoundingClientRect();
     return new Immutable.Map({
-      x: mouseEvent.clientX - boundingRect.left,
-      y: mouseEvent.clientY - boundingRect.top,
+      x: pointerEvent.clientX - boundingRect.left,
+      y: pointerEvent.clientY - boundingRect.top,
     });
   };
 
@@ -118,8 +118,8 @@ class Canvas extends Component {
       <div
         className="canvas"
         ref="canvas"
-        onMouseDown={this.handleMouseDown}
-        onMouseMove={this.handleMouseMove}
+        onPointerDown={this.handlePointerDown}
+        onPointerMove={this.handlePointerMove}
         style={{ backgroundColor: `rgba(${canvasColor.r}, ${canvasColor.g}, ${canvasColor.b}, ${canvasColor.a})` }}
       >
 
@@ -131,7 +131,8 @@ class Canvas extends Component {
           </Button>
           <div className="colorButton">
             <p className="label">Canvas Color</p>
-            <CanvasColorButton setCanvasColor={this.setCanvasColor} colorFromStorage={canvasColor} className="colorPicker"/>
+            <CanvasColorButton setCanvasColor={this.setCanvasColor} colorFromStorage={canvasColor}
+                               className="colorPicker"/>
           </div>
         </div>
       </div>
@@ -140,7 +141,6 @@ class Canvas extends Component {
 }
 
 export default withStyles(styles)(Canvas);
-
 
 const Drawing = ({ lines }) => {
   return (
